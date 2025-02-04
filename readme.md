@@ -2,7 +2,7 @@
 
 > Transform your WhatsApp experience with a locally-deployed intelligent AI powered by DeepSeek-R1, ensuring 100% data privacy while delivering state-of-the-art conversational intelligence.
 
-[WhatsApp Chat Interface](assets/chat-demo.png)
+[WhatsApp Chat Interface](https://github.com/user-attachments/assets/236a2a09-3620-4bb8-a58d-47b4e0ac4db8)
 
 ## 🔒 Privacy-First Architecture
 
@@ -53,7 +53,7 @@ Transform your business communications with privacy-preserving AI technology. Th
 - Travel booking assistance
 - Restaurant recommendations
 
-[Feature Overview](assets/features.png) <!-- Add an infographic showing key features -->
+[Feature Overview](https://github.com/user-attachments/assets/9abdcd91-3874-4d00-a0c9-320a2af828e3) <!-- Add an infographic showing key features -->
 
 ## 🚀 Features
 
