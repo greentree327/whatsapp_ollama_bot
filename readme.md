@@ -95,7 +95,6 @@ Create a `.env` file in the root directory with the following content:
 ```env
 WHATSAPP_TOKEN=your_whatsapp_token
 VERIFY_TOKEN=your_verify_token
-PHONE_NUMBER_ID=your_phone_number_id
 ```
 
 ### Set Up Ngrok
@@ -150,18 +149,6 @@ node index.js
 - Admin dashboard
 
 ---
-
-## 📚 Documentation
-- [WhatsApp Cloud API Documentation](https://developers.facebook.com/docs/whatsapp)
-- [Ollama Documentation](https://ollama.com/docs)
-- [DeepSeek-R1 Model Details](https://example.com/deepseek-r1)
-
----
-
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
-
 ## 📊 Performance Optimization
 
 ### Hardware Requirements
@@ -174,3 +161,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Optimized for performance/quality balance
 
 [Performance Metrics](assets/performance.png) <!-- Add a graph showing response times -->
+
+---
+## 📚 Documentation
+- [WhatsApp Cloud API Documentation](https://developers.facebook.com/docs/whatsapp)
+- [Ollama Documentation](https://ollama.com/docs)
+- [DeepSeek-R1 Model Details](https://example.com/deepseek-r1)
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+
