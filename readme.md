@@ -53,7 +53,7 @@ Transform your business communications with privacy-preserving AI technology. Th
 - Travel booking assistance
 - Restaurant recommendations
 
-[Feature Overview](https://github.com/user-attachments/assets/9abdcd91-3874-4d00-a0c9-320a2af828e3) <!-- Add an infographic showing key features -->
+[More Use Cases](https://github.com/user-attachments/assets/9abdcd91-3874-4d00-a0c9-320a2af828e3) <!-- Add an infographic showing key features -->
 
 ## 🚀 Features
 
@@ -160,7 +160,7 @@ node index.js
 - Currently using deepseek-r1 7B model
 - Optimized for performance/quality balance
 
-[Performance Metrics](assets/performance.png) <!-- Add a graph showing response times -->
+[Performance Metrics](https://github.com/user-attachments/assets/407bea9e-5330-4275-ab6c-2b71a268840f) <!-- Add a graph showing response times -->
 
 ---
 ## 📚 Documentation
