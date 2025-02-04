@@ -17,7 +17,7 @@ function getOllamaInstance(phoneNumber) {  // From ollama.js
 */
 
 
-const WEBHOOK_VERIFY_TOKEN = 'my-verify-token' // Set the webhook verify token as a global parameter such that it can be used in any route
+const WEBHOOK_VERIFY_TOKEN = process.env.WEBHOOK_VERIFY_TOKEN; // Set the webhook verify token as a global parameter such that it can be used in any route
 
 const app = express() // we need to tell express to accept Json type request, as whatsapp messages from users will be sent in Json type
 app.use(express.json())
@@ -54,6 +54,10 @@ app.get('/webhook', (request, response) => { // base on the Whatsapp (WS) doc, W
 
 // Add POST route
 app.post('/webhook', async (request, response) => { // handle if it is a message request / status request
+
+    // Send 200 OK *after* processing all messages and changes
+    response.status(200).send('Webhook processed'); // return HTTP 200 status to Meta, let them know that the message has been received successfully to webhook, and served my my application, so that meta won't retry to send the same message again
+    
     // console.log(JSON.stringify(request.body, null, 2)) : JSON.stringify() converts that object into a string representation of the JSON
     const { entry } = request.body
 
@@ -87,26 +91,28 @@ app.post('/webhook', async (request, response) => { // handle if it is a message
             const userMessage = messages.text.body;
             try {
                 // Make direct request to Ollama API
-                const ollamaResponse = await axios.post('http://127.0.0.1:11434/api/generate', {
+                const ollamaResponse = await axios.post('http://127.0.0.1:11434/api/chat', { // use IPv4 address
                     model: 'deepseek-r1:latest',
-                    prompt: userMessage,
+                    // prompt: userMessage, only use when api/generate is set
+                    messages: [{
+                        role: 'user',
+                        content: userMessage
+                    }],
                     stream: false
                 });
         
                 // Extract just the response text
-                let botReply = ollamaResponse.data.response;
-                
-                // Clean up the response by removing think tags if present
-                botReply = botReply.replace(/<think>\n*/g, '')
-                                  .replace(/<\/think>\n*/g, '')
-                                  .trim();
+                    // for api/generate, use let botReply = ollamaResponse.data.response; 
+                let botReply = ollamaResponse.data.message?.content;
                 
                 if (!botReply) {
                     throw new Error('Empty response from Ollama');
                 }
         
-                // Send response back through WhatsApp
+                // Send response back through WhatsApp in correct order, allow error handling first
                 await replyMessage(messages.from, botReply, messages.id);
+
+                
         
             } catch (error) {
                 console.error('Ollama error:', error.response?.data || error.message || error);
@@ -117,42 +123,12 @@ app.post('/webhook', async (request, response) => { // handle if it is a message
                     "I apologize, but I'm having trouble processing your request at the moment.", 
                     messages.id
                 );
-            }
-        
-                /*
-                const ollamaResponse = await axios({
-                    // method: 'post',
-                    url: 'http://localhost:11434/api/generate',
-                    headers: { 'Content-Type': 'application/json' },
-                    data: {  // The data payload for Ollama, equivalent to the -d option in curl
-                      model: 'deekseek-r1', // Use the correct model name (deepseek-r1 or llama2)
-                      prompt: userMessage,
-                      stream: false, // Disable streaming to get the full response at once
-                      // ... any other Ollama parameters if needed
-                    },
-                  });
-                
 
-                // Check if the HTTP request is successful, provided my the ollama server (status 200-299)
-                if (ollamaResponse.ok) {  // Check for successful response (status 200-299)
-                    const ollamaData = await ollamaResponse.json();
-                    const botReply = ollamaData.response;
-        
-                        // Send Ollama's response back to the user
-                        await replyMessage(messages.from, botReply, messages.id);
-        
-        
-                } else {
-                    console.error("Ollama Request failed:", ollamaResponse.status, ollamaResponse.statusText) // Log error details for debugging
-                    const errorData = await ollamaResponse.text();
-                    // Handle errors appropriately (e.g., retry, send an error message to the WhatsApp user)
-                    await replyMessage(messages.from, `Error: Ollama request failed (${ollamaResponse.status})`, messages.id);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                await replyMessage(messages.from, `Error: Could not process your message.`, messages.id);
+                
             }
-            
+        
+            /*
+            // Check if the HTTP request is successful, provided my the ollama server (status 200-299)
             if (messages.text.body.toLowerCase() === 'hello') {
                 replyMessage(messages.from, 'Hello. How are you?', messages.id)
             }
@@ -167,16 +143,17 @@ app.post('/webhook', async (request, response) => { // handle if it is a message
         if (messages.type === 'interactive') {
             if (messages.interactive.type === 'list_reply'){
                 sendMessage(messages.from, `You selected the option with ID ${messages.interactive.list_reply.id} - Title ${messages.interactive.list_reply.title}`)
+                response.status(200).send('Webhook processed');
             }
 
             if (messages.interactive.type === 'button_reply'){
                 sendMessage(messages.from, `You selected the button with ID ${messages.interactive.button_reply.id} - Title ${messages.interactive.button_reply.title}`)
+                response.status(200).send('Webhook processed');
             }
         }
         console.log(JSON.stringify(messages, null, 2))
     }
-
-    response.status(200).send('Webhook processed') // return HTTP 200 status to Meta, let them know that the message has been received successfully to webhook, and served my my application, so that meta won't retry to send the same message again
+    
 })
 
 async function sendMessage(to, body) { // to: phone number; body: the actual message sent back to user
