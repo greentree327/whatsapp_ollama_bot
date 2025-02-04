@@ -71,13 +71,6 @@ Transform your business communications with privacy-preserving AI technology. Th
 - WhatsApp Business API
 - Webhook Integration
 
-  ```markdown
-# WhatsApp Ollama Bot
-
-A project to integrate WhatsApp messaging with the Ollama local LLM for real-time message processing and conversation handling.
-
----
-
 ## 🔧 Installation & Setup
 
 ### Prerequisites
